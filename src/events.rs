@@ -8,11 +8,11 @@ pub mod prelude {
 
 #[derive(Debug, Event)]
 pub struct NewTransition {
-    // angle is in degrees (0 to 360)
+    // degrees (0 to 360)
     pub angle: f32,
-    // color is a bevy color
+    // bevy color
     pub color: Color,
-    // duration is in seconds
+    // seconds
     pub duration: f32,
     // easing
     pub ease: EaseFunction,
