@@ -1,0 +1,25 @@
+[package]
+name = "bevy_shape_transition"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+bevy = { version = "0.15.0-rc.3", features = [ "bevy_render", "bevy_pbr" ] }
+rand = "0.8.5"
+
+[features]
+webgl2 = ["bevy/webgl2"]
+
+[[example]]
+name = "debug"
+path = "examples/debug.rs"
+
+[[example]]
+name = "left_right"
+path = "examples/left_right.rs"
+
+[[example]]
+name = "party"
+path = "examples/party.rs"
+
+
