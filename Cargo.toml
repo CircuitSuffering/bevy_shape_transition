@@ -5,6 +5,8 @@ edition = "2021"
 
 [dependencies]
 bevy = { version = "0.15.0-rc.3", features = [ "bevy_render", "bevy_pbr" ] }
+
+[dev-dependencies]
 rand = "0.8.5"
 
 [features]

@@ -1,10 +1,4 @@
-use bevy::{
-    core::FrameCount,
-    core_pipeline::bloom::Bloom,
-    prelude::*,
-    render::view::screenshot::{save_to_disk, Screenshot, ScreenshotPlugin},
-    window::PrimaryWindow,
-};
+use bevy::{core_pipeline::bloom::Bloom, prelude::*};
 use bevy_shape_transition::prelude::*;
 
 fn main() {
@@ -29,17 +23,7 @@ fn setup(mut commands: Commands) {
 }
 
 // on update, check for arrow key presses and send transition events
-fn update(
-    mut commands: Commands,
-    mut events: EventWriter<NewTransition>,
-    keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut counter: Local<u32>,
-) {
-    //let path = format!("screenshot_{:?}.png", counter);
-    //*counter += 1;
-    //commands.spawn(Screenshot::primary_window())
-    //  .observe(save_to_disk(path));
-
+fn update(mut events: EventWriter<NewTransition>, keyboard_input: Res<ButtonInput<KeyCode>>) {
     if keyboard_input.just_pressed(KeyCode::ArrowLeft) {
         events.send(NewTransition {
             angle: 0.0,

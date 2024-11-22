@@ -1,17 +1,6 @@
-use std::sync::Mutex;
-
-use bevy::{
-    core::FrameCount,
-    core_pipeline::bloom::Bloom,
-    prelude::*,
-    render::view::screenshot::{save_to_disk, Screenshot, ScreenshotPlugin},
-    window::PrimaryWindow,
-};
+use bevy::{core_pipeline::bloom::Bloom, prelude::*};
 use bevy_shape_transition::prelude::*;
-use rand::{
-    rngs::StdRng,
-    Rng, SeedableRng,
-};
+use rand::{rngs::StdRng, Rng, SeedableRng};
 
 #[derive(Debug, Resource)]
 pub struct PartyRng(StdRng);
@@ -26,9 +15,7 @@ fn main() {
 }
 
 // create a camera
-fn setup(
-    mut commands: Commands
-) {
+fn setup(mut commands: Commands) {
     commands.spawn((
         Camera2d::default(),
         Camera {
@@ -42,19 +29,12 @@ fn setup(
 
 // on update, check if the driver is 0.0 and send a transition event
 fn update(
-    mut commands: Commands,
     mut events: EventWriter<NewTransition>,
-    mut shader_query: Query<&mut TransitionDefinition>,
     mut rng: ResMut<PartyRng>,
-    mut time : ResMut<Time>,
+    time: Res<Time>,
     mut last_spawned: Local<f32>,
-    mut counter: Local<u32>,
 ) {
     let duration = 2.5;
-    let path = format!("party_screenshot_{:?}.png", counter);
-    *counter += 1;
-    commands.spawn(Screenshot::primary_window())
-      .observe(save_to_disk(path));
 
     if duration + *last_spawned < time.elapsed_secs() {
         *last_spawned = time.elapsed_secs();
