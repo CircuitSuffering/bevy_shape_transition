@@ -21,6 +21,9 @@ bevy_shape_transition = { git = "https://github.com/circuitsuffer-studios/bevy_s
 
 ### Party
 
+> [!NOTE]
+> Gif is too big
+
 <img src="./assets/gifs/example_party.gif" width="50%" height="50%"/>
 
 ### Usage
