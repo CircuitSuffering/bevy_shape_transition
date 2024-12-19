@@ -90,7 +90,6 @@ impl ViewNode for TransitionNode {
     }
 }
 
-// This contains global data used by the render pipeline. This will be created once on startup.
 #[derive(Resource)]
 pub struct TransitionPipeline {
     layout: BindGroupLayout,
@@ -105,7 +104,6 @@ impl FromWorld for TransitionPipeline {
         let layout = render_device.create_bind_group_layout(
             "transition_bind_group_layout",
             &BindGroupLayoutEntries::sequential(
-                // The layout entries will only be visible in the fragment stage
                 ShaderStages::FRAGMENT,
                 (
                     texture_2d(TextureSampleType::Float { filterable: true }),
@@ -140,6 +138,7 @@ impl FromWorld for TransitionPipeline {
                     depth_stencil: None,
                     multisample: MultisampleState::default(),
                     push_constant_ranges: vec![],
+                    zero_initialize_workgroup_memory: true
                 });
 
         Self {
@@ -150,7 +149,6 @@ impl FromWorld for TransitionPipeline {
     }
 }
 
-// This is the component that will get passed to the shader
 #[derive(Debug, Component, Reflect, Clone, Copy, ExtractComponent, ShaderType)]
 #[reflect(Debug, Component, Default)]
 pub struct TransitionDefinition {
@@ -166,11 +164,11 @@ pub struct TransitionDefinition {
 impl Default for TransitionDefinition {
     fn default() -> Self {
         Self {
-            color1: Vec4::new(0.0, 0.0, 0.0, 0.0),
-            color2: Vec4::new(0.0, 0.0, 0.0, 0.0),
+            color1: Vec4::ZERO,
+            color2: Vec4::ZERO,
             resolution: Vec2::ZERO,
-            driver: 0.0,
-            movement_angle: 0.0,
+            driver: f32::NAN,
+            movement_angle: f32::NAN,
             #[cfg(feature = "webgl2")]
             webgl2_padding: Vec2::ZERO,
         }

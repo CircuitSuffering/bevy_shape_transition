@@ -36,7 +36,8 @@ impl Plugin for TransitionPlugin {
             "..\\assets\\shader.wgsl",
             Shader::from_wgsl
         );
-        app.register_type::<TransitionDefinition>().add_plugins((
+        app.register_type::<TransitionDefinition>();
+        app.add_plugins((
             ExtractComponentPlugin::<TransitionDefinition>::default(),
             UniformComponentPlugin::<TransitionDefinition>::default(),
         ));
@@ -92,14 +93,16 @@ impl Default for TransitionState {
     fn default() -> Self {
         Self {
             definition: EaseFunction::Linear,
-            duration: 1.0,
+            duration: 0.0,
             progress: 1.0,
             started: None,
         }
     }
 }
 
-fn startup(mut commands: Commands) {
+fn startup(
+    mut commands: Commands
+) {
     commands.spawn(TransitionDefinition::default());
 }
 
@@ -108,8 +111,6 @@ fn update(
     mut state: ResMut<TransitionState>,
     time: Res<Time>,
 ) {
-    let buffer = 0.01;
-
     // Early return if transition hasn't started
     let started = match state.started {
         Some(f) => f,
@@ -119,6 +120,7 @@ fn update(
     // Calculate elapsed time
     let now = time.elapsed_secs() - started;
 
+    let buffer = 0.01;
     // Reset logic if the transition duration is exceeded
     if now > state.duration + buffer {
         if let Ok(mut shader) = shader_query.get_single_mut() {
@@ -137,7 +139,7 @@ fn update(
         state.progress = state.progress + time.delta_secs() / state.duration;
 
         // Sample the easing curve
-        if let Some(eased_value) = easing_curve(0.0, 1.0, state.definition).sample(state.progress) {
+        if let Some(eased_value) = EasingCurve::new(0.0, 1.0, state.definition).sample(state.progress) {
             // Directly assign eased value to driver
             shader.driver = eased_value;
         }
@@ -151,5 +153,7 @@ fn on_resize(
     for event in resize_reader.read() {
         current_definition.single_mut().resolution =
             Vec2::new(event.width as f32, event.height as f32);
+
+        println!("Resolution: {:?}", current_definition.single().resolution);
     }
 }
